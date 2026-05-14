@@ -8,7 +8,9 @@
   --color-muted: #2A2A2A;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -25,13 +27,27 @@ body {
   overflow-x: hidden;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.02em;
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }
+
 ::-webkit-scrollbar-track {
   background: theme(--color-primary);
 }
+
 ::-webkit-scrollbar-thumb {
   background: theme(--color-text);
   border-radius: 2px;
+}
+
+* {
+  cursor: none;
 }
