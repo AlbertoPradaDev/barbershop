@@ -1,21 +1,92 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from '../../lib/gsap';
+import Button from '../Button';
 
-const services = [
-  'Corte clássico',
-  'Sobranchelas',
-  'Barba',
-  'Tatuagem',
+const serviceOptions = [
+  { value: 'corte', label: 'Corte de Cabelo' },
+  { value: 'tatuagem', label: 'Tatuagem' },
 ];
+
+function CustomSelect({ value, onChange, placeholder }) {
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const selected = serviceOptions.find((o) => o.value === value);
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      {/* Trigger */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between border-b border-text/20 py-3 text-sm transition-colors duration-300 focus:outline-none focus:border-text"
+      >
+        <span className={selected ? 'text-text' : 'text-text/30'}>
+          {selected ? selected.label : placeholder}
+        </span>
+
+        {/* Chevron — dos líneas que forman ∨ / ∧ */}
+        <span className="relative w-4 h-3 shrink-0">
+          <span
+            className={`absolute left-0 top-1/2 w-2 h-px bg-text/40 origin-right transition-transform duration-300 ${open ? '-rotate-45' : 'rotate-45'}`}
+          />
+          <span
+            className={`absolute right-0 top-1/2 w-2 h-px bg-text/40 origin-left transition-transform duration-300 ${open ? 'rotate-45' : '-rotate-45'}`}
+          />
+        </span>
+      </button>
+
+      {/* Panel */}
+      <div
+        className={`absolute top-full left-0 right-0 z-20 bg-secondary border-x border-b border-text/10 overflow-hidden transition-all duration-300 ease-out ${
+          open ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        {serviceOptions.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => {
+              onChange(option.value);
+              setOpen(false);
+            }}
+            className={`w-full text-left py-4 text-sm border-b border-text/10 last:border-0 flex items-center gap-3 transition-colors duration-200 ${
+              value === option.value
+                ? 'text-accent'
+                : 'text-text/50 hover:text-text'
+            }`}
+          >
+            <span
+              className={`w-1 h-1 rounded-full shrink-0 transition-colors duration-200 ${
+                value === option.value ? 'bg-accent' : 'bg-text/20'
+              }`}
+            />
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Booking() {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const formRef = useRef(null);
+  const [service, setService] = useState('');
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Título entra desde abajo
       gsap.fromTo(
         titleRef.current,
         { y: 60, opacity: 0 },
@@ -24,14 +95,10 @@ export default function Booking() {
           opacity: 1,
           duration: 1,
           ease: 'power3.out',
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 80%',
-          },
+          scrollTrigger: { trigger: titleRef.current, start: 'top 80%' },
         },
       );
 
-      // Formulario entra desde abajo con delay
       gsap.fromTo(
         formRef.current,
         { y: 80, opacity: 0 },
@@ -40,10 +107,7 @@ export default function Booking() {
           opacity: 1,
           duration: 1,
           ease: 'power3.out',
-          scrollTrigger: {
-            trigger: formRef.current,
-            start: 'top 85%',
-          },
+          scrollTrigger: { trigger: formRef.current, start: 'top 85%' },
         },
       );
     }, sectionRef);
@@ -53,40 +117,38 @@ export default function Booking() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí conectarás con tu backend más adelante
-    console.log('Formulário enviado');
+    if (!service) return;
+    console.log('Mensagem enviada');
   };
+
+  const inputCls =
+    'bg-transparent border-b border-text/20 py-3 text-sm text-text placeholder:text-text/20 focus:outline-none focus:border-text transition-colors duration-300';
 
   return (
     <section
       id="booking"
       ref={sectionRef}
-      className="relative py-32 px-6 md:px-16 lg:px-24 bg-secondary"
+      className="relative py-20 md:py-32 px-8 md:px-16 lg:px-24 bg-secondary"
     >
-      {/* Fondo decorativo */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/50 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-b from-primary/50 to-transparent pointer-events-none" />
 
       <div className="relative z-10 max-w-2xl mx-auto">
         {/* Título */}
         <div ref={titleRef} className="mb-16 text-center md:text-left">
           <div className="w-10 h-px bg-accent mb-6 mx-auto md:mx-0" />
           <span className="text-xs tracking-[0.3em] uppercase text-text/40">
-            Reservas
+            Contacto
           </span>
           <h2 className="text-5xl md:text-6xl font-black uppercase mt-3 leading-none">
-            Agende
+            Envie uma
             <br />
-            sua visita
+            mensagem
           </h2>
         </div>
 
         {/* Formulario */}
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-6"
-        >
-          {/* Fila — nombre y teléfono */}
+        <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
+          {/* Nome + Email */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
               <label className="text-xs tracking-widest uppercase text-text/40">
@@ -96,74 +158,56 @@ export default function Booking() {
                 type="text"
                 placeholder="Seu nome"
                 required
-                className="bg-transparent border-b border-text/20 py-3 text-sm text-text placeholder:text-text/20 focus:outline-none focus:border-text transition-colors duration-300"
+                className={inputCls}
               />
             </div>
-
             <div className="flex flex-col gap-2">
               <label className="text-xs tracking-widest uppercase text-text/40">
-                Telefone
+                Email
               </label>
               <input
-                type="tel"
-                placeholder="+351 123456789"
+                type="email"
+                placeholder="seu@email.com"
                 required
-                className="bg-transparent border-b border-text/20 py-3 text-sm text-text placeholder:text-text/20 focus:outline-none focus:border-text transition-colors duration-300"
+                className={inputCls}
               />
             </div>
           </div>
 
-          {/* Servicio */}
+          {/* Serviço */}
           <div className="flex flex-col gap-2">
             <label className="text-xs tracking-widest uppercase text-text/40">
               Serviço
             </label>
-            <select
-              required
-              className="bg-secondary border-b border-text/20 py-3 text-sm text-text/60 focus:outline-none focus:border-text transition-colors duration-300 cursor-pointer"
-            >
-              <option value="" disabled selected>
-                Selecione um serviço
-              </option>
-              {services.map((s) => (
-                <option key={s} value={s} className="bg-secondary">
-                  {s}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Fecha */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs tracking-widest uppercase text-text/40">
-              Data preferida
-            </label>
-            <input
-              type="date"
-              required
-              className="bg-transparent border-b border-text/20 py-3 text-sm text-text/60 focus:outline-none focus:border-text transition-colors duration-300 cursor-pointer"
+            <CustomSelect
+              value={service}
+              onChange={setService}
+              placeholder="Selecione um serviço"
             />
           </div>
 
-          {/* Mensaje */}
+          {/* Mensagem */}
           <div className="flex flex-col gap-2">
             <label className="text-xs tracking-widest uppercase text-text/40">
-              Observações
+              Mensagem
             </label>
             <textarea
-              rows={3}
-              placeholder="Detalhes do corte, referências de tatuagem..."
-              className="bg-transparent border-b border-text/20 py-3 text-sm text-text placeholder:text-text/20 focus:outline-none focus:border-text transition-colors duration-300 resize-none"
+              rows={4}
+              placeholder="Escreva a sua mensagem..."
+              required
+              className={`${inputCls} resize-none`}
             />
           </div>
 
           {/* Submit */}
-          <button
+          <Button
             type="submit"
-            className="mt-4 px-10 py-5 bg-text text-primary text-xs font-black tracking-widest uppercase hover:bg-accent hover:text-text transition-all duration-300 self-start"
+            variant="primary"
+            size="lg"
+            className="self-center md:self-start mt-4"
           >
-            Confirmar agendamento
-          </button>
+            Enviar mensagem
+          </Button>
         </form>
       </div>
     </section>

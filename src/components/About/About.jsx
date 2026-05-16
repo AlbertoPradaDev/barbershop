@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from '../../lib/gsap';
+import Button from '../Button';
 
 const stats = [
   { value: '8+', label: 'Anos de experiência' },
@@ -102,16 +103,16 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-32 px-6 md:px-16 lg:px-24 bg-primary overflow-hidden"
+      className="relative py-20 md:py-32 px-8 md:px-16 lg:px-24 bg-primary overflow-hidden"
     >
       {/* Línea decorativa superior */}
-      <div ref={lineRef} className="w-full h-px bg-text/10 mb-24 origin-left" />
+      <div ref={lineRef} className="w-full h-px bg-text/10 mb-12 md:mb-24 origin-left" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
         {/* Lado izquierdo — imagen */}
         <div
           ref={imageRef}
-          className="relative aspect-[3/4] bg-secondary border border-text/10 overflow-hidden"
+          className="relative aspect-3/4 bg-secondary border border-text/10 overflow-hidden"
         >
           {/* Placeholder hasta tener foto real */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -157,7 +158,7 @@ export default function About() {
           </p>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-6 pt-4 border-t border-text/10">
+          <div className="grid grid-cols-3 gap-3 md:gap-6 pt-4 border-t border-text/10">
             {stats.map((stat, i) => (
               <div
                 key={stat.label}
@@ -175,12 +176,9 @@ export default function About() {
           </div>
 
           {/* CTA */}
-          <a
-            href="#booking"
-            className="self-start px-8 py-4 border border-text/20 text-xs font-bold tracking-widest uppercase hover:border-text hover:bg-text hover:text-primary transition-all duration-300"
-          >
+          <Button href="#booking" variant="outline" className="self-start">
             Agendar agora
-          </a>
+          </Button>
         </div>
       </div>
     </section>

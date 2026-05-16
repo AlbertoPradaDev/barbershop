@@ -1,23 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0A0A0A;
+  --color-primary: #111111;
   --color-secondary: #1A1A1A;
   --color-text: #F5F0E8;
   --color-accent: #8B0000;
   --color-muted: #2A2A2A;
 }
 
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -25,6 +18,8 @@ body {
   color: theme(--color-text);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 h1,

@@ -60,11 +60,11 @@ export default function Footer() {
     <footer
       id="footer"
       ref={footerRef}
-      className="relative bg-primary border-t border-text/10 px-6 md:px-16 lg:px-24 pt-24 pb-12"
+      className="relative bg-primary border-t border-text/10 px-8 md:px-16 lg:px-24 pt-24 pb-12"
     >
       {/* Logo grande decorativo de fondo */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-        <span className="text-[20vw] font-black uppercase text-text/[0.02] select-none leading-none">
+        <span className="text-[20vw] font-black uppercase text-text/2 select-none leading-none">
           Lorem
         </span>
       </div>
@@ -146,7 +146,7 @@ export default function Footer() {
       </div>
 
       {/* Línea divisoria + copyright */}
-      <div className="border-t border-text/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="border-t border-text/10 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <span className="text-xs text-text/20 tracking-widest uppercase">
           © 2026 Lorem. Todos os direitos reservados.
         </span>

@@ -5,7 +5,6 @@ const services = [
   {
     id: 'barber',
     label: 'Barbería',
-    icon: '✦',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cortes que definen tu estilo.',
     items: [
@@ -19,7 +18,6 @@ const services = [
   {
     id: 'tattoo',
     label: 'Tatuajes',
-    icon: '◈',
     description:
       'Lorem ipsum dolor sit amet. Tinta que cuenta tu historia, arte que dura para siempre.',
     items: ['Blackwork', 'Realismo', 'Tradicional', 'Lettering'],
@@ -34,7 +32,6 @@ export default function Services() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Título entra desde abajo cuando la sección entra al viewport
       gsap.fromTo(
         titleRef.current,
         { y: 60, opacity: 0 },
@@ -45,73 +42,42 @@ export default function Services() {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: titleRef.current,
-            start: 'top 80%', // dispara cuando el título está al 80% del viewport
+            start: 'top 80%',
           },
         },
       );
 
-      // Cada card entra con un pequeño retraso entre sí
-      cardsRef.current.forEach((card, i) => {
-        gsap.fromTo(
-          card,
-          { y: 80, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-            },
-            delay: i * 0.15, // cada card espera 150ms más que la anterior
-          },
-        );
+      // Timeline con entrada y salida automática al invertir
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 65%',
+          end: 'bottom 20%',
+          toggleActions: 'play reverse play reverse',
+        },
       });
+
+      tl.fromTo(
+        cardsRef.current,
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.15, ease: 'power3.out' },
+      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  // Efecto tilt 3D en hover — puro JS, sin librerías extra
-  const handleMouseMove = (e, card) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left; // posición X del mouse dentro de la card
-    const y = e.clientY - rect.top; // posición Y del mouse dentro de la card
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -8; // máximo 8° de inclinación
-    const rotateY = ((x - centerX) / centerX) * 8;
-
-    gsap.to(card, {
-      rotateX,
-      rotateY,
-      duration: 0.4,
-      ease: 'power2.out',
-      transformPerspective: 800,
-    });
-  };
-
-  const handleMouseLeave = (card) => {
-    gsap.to(card, {
-      rotateX: 0,
-      rotateY: 0,
-      duration: 0.6,
-      ease: 'elastic.out(1, 0.6)', // rebote elástico al volver al centro
-    });
-  };
-
   return (
     <section
       id="services"
       ref={sectionRef}
-      className="relative py-32 px-6 md:px-16 lg:px-24 bg-primary"
+      className="relative py-20 md:py-32 px-8 md:px-16 lg:px-24 bg-primary"
     >
       {/* Línea decorativa superior */}
       <div className="w-16 h-px bg-accent mb-8" />
 
       {/* Título */}
-      <div ref={titleRef} className="mb-20">
+      <div ref={titleRef} className="mb-12 md:mb-20">
         <span className="text-xs tracking-[0.3em] uppercase text-text/40">
           Lo que hacemos
         </span>
@@ -128,16 +94,8 @@ export default function Services() {
           <div
             key={service.id}
             ref={(el) => (cardsRef.current[i] = el)}
-            onMouseMove={(e) => handleMouseMove(e, cardsRef.current[i])}
-            onMouseLeave={() => handleMouseLeave(cardsRef.current[i])}
-            className="relative p-8 md:p-10 border border-text/10 bg-secondary cursor-default"
-            style={{ transformStyle: 'preserve-3d' }}
+            className="relative p-8 md:p-10 border border-text/10 bg-secondary"
           >
-            {/* Icono */}
-            <span className="text-3xl text-accent mb-6 block">
-              {service.icon}
-            </span>
-
             {/* Label */}
             <h3 className="text-3xl font-black uppercase mb-4">
               {service.label}

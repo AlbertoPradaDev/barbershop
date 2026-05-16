@@ -31,6 +31,13 @@ export default function SkullCanvas() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.shadowMap.enabled = true
 
+    // ─── ENTRADA SINCRONIZADA CON EL TEXTO ───────────────
+    const entranceTween = gsap.fromTo(
+      canvas,
+      { opacity: 0 },
+      { opacity: 0.9, duration: 2.5, delay: 0.8, ease: 'power2.out' }
+    )
+
     // ─── LUCES ────────────────────────────────────────────
     const ambientLight = new THREE.AmbientLight('#ffffff', 0.5)
     scene.add(ambientLight)
@@ -142,6 +149,7 @@ export default function SkullCanvas() {
 
     // ─── LIMPIEZA ─────────────────────────────────────────
     return () => {
+      entranceTween.kill()
       cancelAnimationFrame(animationId)
       scrollAnim.kill()
       renderer.dispose()
@@ -155,7 +163,7 @@ export default function SkullCanvas() {
     <canvas
       ref={canvasRef}
       className="w-full h-full"
-      style={{ opacity: 0.9 }}
+      style={{ opacity: 0 }}
     />
   )
 }

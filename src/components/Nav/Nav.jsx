@@ -1,10 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from '../../lib/gsap'
+import Button from '../Button'
 
 const links = ['Services', 'Gallery', 'About', 'Booking']
 
 export default function Nav() {
   const navRef = useRef(null)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     gsap.fromTo(
@@ -17,39 +19,73 @@ export default function Nav() {
   return (
     <nav
       ref={navRef}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5"
+      className="fixed top-0 left-0 right-0 z-50"
       style={{
         backdropFilter: 'blur(12px)',
         background: 'rgba(10,10,10,0.6)',
         borderBottom: '1px solid rgba(245,240,232,0.06)',
       }}
     >
-      {/* Logo */}
-      <span className="text-xl font-black tracking-widest uppercase">
-        Lorem<span className="text-accent">.</span>
-      </span>
+      <div className="flex items-center justify-between px-8 md:px-12 lg:px-16 py-6">
+        {/* Logo */}
+        <span className="text-xl font-black tracking-widest uppercase">
+          Lorem<span className="text-accent">.</span>
+        </span>
 
-      {/* Links */}
-      <ul className="hidden md:flex items-center gap-10">
-        {links.map((link) => (
-          <li key={link}>
-            <a
-              href={`#${link.toLowerCase()}`}
-              className="text-sm tracking-widest uppercase text-text/60 hover:text-text transition-colors duration-300"
-            >
-              {link}
-            </a>
-          </li>
-        ))}
-      </ul>
+        {/* Links desktop */}
+        <ul className="hidden md:flex items-center gap-10">
+          {links.map((link) => (
+            <li key={link}>
+              <a
+                href={`#${link.toLowerCase()}`}
+                className="text-sm tracking-widest uppercase text-text/60 hover:text-text transition-colors duration-300"
+              >
+                {link}
+              </a>
+            </li>
+          ))}
+        </ul>
 
-      {/* CTA */}
-      <a
-        href="#booking"
-        className="hidden md:block text-xs tracking-widest uppercase px-6 py-3 border border-text/20 hover:border-text hover:bg-text hover:text-primary transition-all duration-300"
+        {/* CTA desktop */}
+        <Button href="#booking" variant="outline" size="sm" className="hidden md:inline-flex">
+          Book Now
+        </Button>
+
+        {/* Hamburger mobile */}
+        <button
+          className="md:hidden flex flex-col justify-center gap-1.5 w-10 h-10"
+          onClick={() => setOpen(!open)}
+          aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+        >
+          <span className={`block w-6 h-px bg-text transition-all duration-300 origin-center ${open ? 'rotate-45 translate-y-1.75' : ''}`} />
+          <span className={`block w-6 h-px bg-text transition-opacity duration-300 ${open ? 'opacity-0' : ''}`} />
+          <span className={`block w-6 h-px bg-text transition-all duration-300 origin-center ${open ? '-rotate-45 -translate-y-1.75' : ''}`} />
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ${open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
       >
-        Book Now
-      </a>
+        <ul className="flex flex-col px-8 pb-8 pt-2 gap-6 border-t border-text/10">
+          {links.map((link) => (
+            <li key={link}>
+              <a
+                href={`#${link.toLowerCase()}`}
+                onClick={() => setOpen(false)}
+                className="text-base tracking-widest uppercase text-text/60 hover:text-text transition-colors duration-300"
+              >
+                {link}
+              </a>
+            </li>
+          ))}
+          <li>
+            <Button href="#booking" variant="outline" size="sm" onClick={() => setOpen(false)}>
+              Book Now
+            </Button>
+          </li>
+        </ul>
+      </div>
     </nav>
   )
 }

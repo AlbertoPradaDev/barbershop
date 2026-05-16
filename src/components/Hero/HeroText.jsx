@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { gsap, SplitText } from '../../lib/gsap';
+import Button from '../Button';
 
 export default function HeroText() {
   const containerRef = useRef(null);
@@ -68,7 +69,7 @@ export default function HeroText() {
   }, []);
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-6">
+    <div ref={containerRef} className="flex flex-col gap-6 items-center md:items-start">
       {/* Tagline pequeña arriba */}
       <span
         ref={taglineRef}
@@ -98,19 +99,13 @@ export default function HeroText() {
       </p>
 
       {/* Botones */}
-      <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 mt-2">
-        <a
-          href="#booking"
-          className="px-8 py-4 bg-text text-primary text-xs font-bold tracking-widest uppercase text-center hover:bg-accent hover:text-text transition-all duration-300"
-        >
+      <div ref={buttonsRef} className="flex flex-col sm:flex-row items-center md:items-start gap-4 mt-2">
+        <Button href="#booking" variant="primary">
           Book Now
-        </a>
-        <a
-          href="#gallery"
-          className="px-8 py-4 border border-text/30 text-xs font-bold tracking-widest uppercase text-center hover:border-text transition-all duration-300"
-        >
+        </Button>
+        <Button href="#gallery" variant="outline">
           Our Work
-        </a>
+        </Button>
       </div>
     </div>
   );
