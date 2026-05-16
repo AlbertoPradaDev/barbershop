@@ -69,6 +69,7 @@ export default function SkullCanvas() {
 
     // ─── CARGAR MODELO GLB ────────────────────────────────
     let skull = null
+    const initialRotY = window.innerWidth >= 768 ? Math.PI / 4 : 0
     const loader = new GLTFLoader()
 
     loader.load(
@@ -88,6 +89,7 @@ export default function SkullCanvas() {
         const maxDim = Math.max(size.x, size.y, size.z)
         const scaleFactor = window.innerWidth >= 1024 ? 2.8 : 2
         skull.scale.setScalar(scaleFactor / maxDim)
+        skull.rotation.y = initialRotY
 
         scene.add(skull)
       },
@@ -109,11 +111,6 @@ export default function SkullCanvas() {
       animationId = requestAnimationFrame(animate)
       const elapsed = clock.getElapsedTime()
 
-      if (skull) {
-        skull.rotation.y += 0.003
-        skull.rotation.x = Math.sin(elapsed * 0.5) * 0.1
-      }
-
       particles.rotation.y = elapsed * 0.02
       particles.rotation.x = elapsed * 0.01
 
@@ -131,8 +128,7 @@ export default function SkullCanvas() {
       onUpdate: (self) => {
         const p = self.progress
         if (skull) {
-          skull.rotation.y = p * Math.PI * 2
-          skull.position.y = p * 0.5
+          skull.rotation.y = initialRotY + p * Math.PI * 2
         }
         redLight.intensity = 3 + p * 5
         particles.scale.setScalar(1 + p * 0.3)
