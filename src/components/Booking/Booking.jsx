@@ -60,17 +60,12 @@ function CustomSelect({ value, onChange, placeholder }) {
               onChange(option.value);
               setOpen(false);
             }}
-            className={`w-full text-left py-4 text-sm border-b border-text/10 last:border-0 flex items-center gap-3 transition-colors duration-200 ${
+            className={`w-full text-left px-2 py-4 text-sm border-b border-text/10 last:border-0 transition-colors duration-200 ${
               value === option.value
                 ? 'text-accent'
                 : 'text-text/50 hover:text-text'
             }`}
           >
-            <span
-              className={`w-1 h-1 rounded-full shrink-0 transition-colors duration-200 ${
-                value === option.value ? 'bg-accent' : 'bg-text/20'
-              }`}
-            />
             {option.label}
           </button>
         ))}
