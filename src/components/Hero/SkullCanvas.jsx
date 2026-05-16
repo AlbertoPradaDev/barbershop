@@ -86,7 +86,8 @@ export default function SkullCanvas() {
 
         // Escalar para que quepa bien en pantalla
         const maxDim = Math.max(size.x, size.y, size.z)
-        skull.scale.setScalar(2 / maxDim)
+        const scaleFactor = window.innerWidth >= 1024 ? 2.8 : 2
+        skull.scale.setScalar(scaleFactor / maxDim)
 
         scene.add(skull)
       },
