@@ -10,14 +10,6 @@ export default function Hero() {
           <SkullCanvas />
         </div>
 
-        {/* 
-          Gradiente (en mobile cubre mas, en desktop menos para que se vea la calavera)
-        */}
-        <div
-          className="
-          absolute inset-0 z-10 pointer-events-none bg-linear-to-r from-primary/95 via-primary/80 to-primary/40 md:from-primary md:to-transparent"
-        />
-
         {/* Texto — centrado en móvil, izquierda en desktop */}
         <div className="relative z-20 w-full px-8 text-center md:w-1/2 md:px-16 md:text-left lg:px-24">
           <HeroText />
