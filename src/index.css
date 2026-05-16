@@ -43,6 +43,8 @@ h4 {
   border-radius: 2px;
 }
 
-* {
-  cursor: none;
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none;
+  }
 }

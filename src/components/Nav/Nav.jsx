@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { gsap } from '../../lib/gsap'
 import Button from '../Button'
 
-const links = ['Services', 'Gallery', 'About', 'Booking']
+const links = ['Services', 'Gallery', 'About']
 
 export default function Nav() {
   const navRef = useRef(null)
@@ -47,9 +47,11 @@ export default function Nav() {
         </ul>
 
         {/* CTA desktop */}
-        <Button href="#booking" variant="outline" size="sm" className="hidden md:inline-flex">
-          Book Now
-        </Button>
+        <div className="max-md:hidden">
+          <Button href="#booking" variant="outline" size="sm">
+            Book Now
+          </Button>
+        </div>
 
         {/* Hamburger mobile */}
         <button

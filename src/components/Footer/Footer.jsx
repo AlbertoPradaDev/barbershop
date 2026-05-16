@@ -167,6 +167,7 @@ export default function Footer() {
             className="text-[10px] text-text/20 hover:text-text/40 transition-colors duration-300"
           >
             "Skull with Beard" by Vicente Betoret Ferrero — CC BY 4.0
+            
           </a>
         </div>
       </div>
