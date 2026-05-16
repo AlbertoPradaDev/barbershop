@@ -3,7 +3,7 @@ import HeroText from './HeroText';
 
 export default function Hero() {
   return (
-    <section id="hero" style={{ height: '300vh' }} className="relative">
+    <section id="hero" style={{ height: '200vh' }} className="relative">
       <div className="sticky top-0 h-screen w-full flex items-center overflow-hidden bg-primary">
         {/* Canvas Three.js — fondo completo siempre */}
         <div className="absolute inset-0 w-full h-full md:left-auto md:right-0 md:w-2/3">
