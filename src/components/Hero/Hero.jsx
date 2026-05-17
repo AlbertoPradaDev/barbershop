@@ -7,8 +7,8 @@ export default function Hero() {
   return (
     <section id="hero" style={{ height: '200vh' }} className="relative">
       <div className="sticky top-0 h-screen w-full flex items-center overflow-hidden bg-primary">
-        {/* Canvas Three.js — carga diferida para no bloquear el render inicial */}
-        <div className="absolute inset-0 w-full h-full md:left-auto md:right-0 md:w-2/3">
+        {/* Canvas Three.js — anclado a la derecha, full-width en móvil, mitad en desktop */}
+        <div className="absolute inset-y-0 right-0 w-full md:w-1/2">
           <Suspense fallback={null}>
             <BarberPole />
           </Suspense>

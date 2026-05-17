@@ -28,7 +28,10 @@ export default function BarberPole() {
       antialias: true,
       alpha: true,
     })
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight)
+    // El tercer argumento `false` evita que Three.js escriba width/height
+    // inline en el canvas, lo que sobreescribiría las clases Tailwind
+    // (w-full h-full) y rompería la fluidez al redimensionar.
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -74,9 +77,29 @@ export default function BarberPole() {
     const particles = new THREE.Points(particleGeo, particleMat)
     scene.add(particles)
 
-    // ─── CARGAR MODELO GLB ────────────────────────────────
+    // ─── ESTADO DEL MODELO ────────────────────────────────
     let barberPole = null
-    const initialRotY = window.innerWidth >= 768 ? Math.PI / 4 : 0
+    let modelCenter = null
+    let modelMaxDim = null
+    let initialRotY = window.innerWidth >= 768 ? Math.PI / 4 : 0
+    let scrollRotY = initialRotY
+    let lastScrollP = 0
+    let entrancePoleAnim = null
+
+    // Recalcula escala, centrado y rotación base según el ancho del viewport.
+    // Llamable en cualquier momento (resize, breakpoint flip) sin re-medir bbox.
+    const applyTransform = () => {
+      if (!barberPole || !modelCenter || !modelMaxDim) return
+      const scaleFactor = window.innerWidth >= 1024 ? 2.8 : 2
+      const s = scaleFactor / modelMaxDim
+      initialRotY = window.innerWidth >= 768 ? Math.PI / 4 : 0
+      barberPole.scale.setScalar(s)
+      barberPole.position.copy(modelCenter).multiplyScalar(-s)
+      // Re-sincroniza la rotación con el progreso de scroll actual
+      scrollRotY = initialRotY + lastScrollP * Math.PI * 2
+    }
+
+    // ─── CARGAR MODELO GLB ────────────────────────────────
     const dracoLoader = new DRACOLoader()
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/')
     const loader = new GLTFLoader()
@@ -88,14 +111,11 @@ export default function BarberPole() {
         barberPole = gltf.scene
 
         const box = new THREE.Box3().setFromObject(barberPole)
-        const center = box.getCenter(new THREE.Vector3())
+        modelCenter = box.getCenter(new THREE.Vector3())
         const size = box.getSize(new THREE.Vector3())
+        modelMaxDim = Math.max(size.x, size.y, size.z)
 
-        const maxDim = Math.max(size.x, size.y, size.z)
-        const scaleFactor = window.innerWidth >= 1024 ? 2.8 : 2
-
-        barberPole.scale.setScalar(scaleFactor / maxDim)
-        barberPole.position.copy(center).multiplyScalar(-scaleFactor / maxDim)
+        applyTransform()
         barberPole.rotation.y = initialRotY
 
         barberPole.traverse((child) => {
@@ -106,10 +126,10 @@ export default function BarberPole() {
 
         scene.add(barberPole)
 
-        // Entrada: sube desde abajo sincronizado con el texto
+        // Entrada: el modelo sube desde abajo hasta su Y final
         const finalY = barberPole.position.y
         barberPole.position.y = finalY - 2
-        gsap.to(barberPole.position, {
+        entrancePoleAnim = gsap.to(barberPole.position, {
           y: finalY,
           duration: 2,
           ease: 'power3.out',
@@ -122,14 +142,35 @@ export default function BarberPole() {
       }
     )
 
+    // ─── CHEQUEO DE RESIZE POR FRAME (mecanismo principal) ──
+    // Compara el tamaño CSS del canvas (clientWidth/Height) contra el
+    // tamaño del drawing buffer (canvas.width/height). Si difieren, el
+    // layout cambió (resize de ventana, DevTools, transición CSS, reflow
+    // del contenedor) y resincronizamos renderer + cámara + transform del
+    // modelo. No depende de ningún evento.
+    const resizeIfNeeded = () => {
+      const w = canvas.clientWidth
+      const h = canvas.clientHeight
+      if (w === 0 || h === 0) return
+      if (canvas.width !== w || canvas.height !== h) {
+        renderer.setSize(w, h, false)
+        camera.aspect = w / h
+        camera.updateProjectionMatrix()
+        applyTransform()
+      }
+    }
+
     // ─── LOOP DE ANIMACIÓN ────────────────────────────────
     let animationId
     const clock = new THREE.Clock()
     let autoRotateY = 0
-    let scrollRotY = initialRotY
 
     const animate = () => {
       animationId = requestAnimationFrame(animate)
+
+      // Chequeo de resize en cada frame — fuente de verdad
+      resizeIfNeeded()
+
       const elapsed = clock.getElapsedTime()
 
       autoRotateY += 0.003
@@ -153,39 +194,41 @@ export default function BarberPole() {
       end: 'bottom bottom',
       scrub: 1.5,
       onUpdate: (self) => {
-        const p = self.progress
-        scrollRotY = initialRotY + p * Math.PI * 2
-        redLight.intensity = 3 + p * 5
-        particles.scale.setScalar(1 + p * 0.3)
+        lastScrollP = self.progress
+        scrollRotY = initialRotY + lastScrollP * Math.PI * 2
+        redLight.intensity = 3 + lastScrollP * 5
+        particles.scale.setScalar(1 + lastScrollP * 0.3)
       },
     })
 
-    // ─── RESPONSIVE ───────────────────────────────────────
-    const handleResize = () => {
-      camera.aspect = canvas.clientWidth / canvas.clientHeight
-      camera.updateProjectionMatrix()
-      renderer.setSize(canvas.clientWidth, canvas.clientHeight)
-    }
-
-    window.addEventListener('resize', handleResize)
+    // ─── RESIZE OBSERVER (secundario, belt-and-suspenders) ──
+    // El chequeo por frame en animate() es el principal, pero el
+    // ResizeObserver dispara `resizeIfNeeded` inmediatamente cuando el
+    // contenedor cambia de tamaño, incluso si el rAF está throttled
+    // (pestaña en background, etc.).
+    const resizeObserver = new ResizeObserver(() => {
+      resizeIfNeeded()
+    })
+    resizeObserver.observe(canvas)
 
     // ─── LIMPIEZA ─────────────────────────────────────────
     return () => {
       entranceTween.kill()
+      if (entrancePoleAnim) entrancePoleAnim.kill()
       cancelAnimationFrame(animationId)
       scrollAnim.kill()
+      resizeObserver.disconnect()
       renderer.dispose()
       particleGeo.dispose()
       particleMat.dispose()
       dracoLoader.dispose()
-      window.removeEventListener('resize', handleResize)
     }
   }, [])
 
   return (
     <canvas
       ref={canvasRef}
-      className="w-full h-full"
+      className="w-full h-full block"
       style={{ opacity: 0 }}
     />
   )

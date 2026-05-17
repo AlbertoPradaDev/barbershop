@@ -5,7 +5,7 @@ import Button from '../Button'
 const links = [
   { label: 'Serviços', href: '#services' },
   { label: 'Galeria', href: '#gallery' },
-  { label: 'Sobre', href: '#about' },
+  { label: 'Sobre Nós', href: '#about' },
 ]
 
 export default function Nav() {
