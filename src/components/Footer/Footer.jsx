@@ -5,11 +5,11 @@ const links = [
   { label: 'Serviços', href: '#services' },
   { label: 'Galeria', href: '#gallery' },
   { label: 'Sobre', href: '#about' },
-  { label: 'Agendamento', href: '#booking' },
+  { label: 'Contacto', href: '#booking' },
 ];
 
 const socials = [
-  { label: 'Instagram', href: '#' },
+  { label: 'Instagram', href: 'https://www.instagram.com/pablo_mendes07/' },
   { label: 'WhatsApp', href: '#' },
   { label: 'TikTok', href: '#' },
 ];

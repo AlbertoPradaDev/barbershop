@@ -1,13 +1,17 @@
-import SkullCanvas from './SkullCanvas';
+import { lazy, Suspense } from 'react';
 import HeroText from './HeroText';
+
+const BarberPole = lazy(() => import('./BarberPole'));
 
 export default function Hero() {
   return (
     <section id="hero" style={{ height: '200vh' }} className="relative">
       <div className="sticky top-0 h-screen w-full flex items-center overflow-hidden bg-primary">
-        {/* Canvas Three.js — fondo completo siempre */}
+        {/* Canvas Three.js — carga diferida para no bloquear el render inicial */}
         <div className="absolute inset-0 w-full h-full md:left-auto md:right-0 md:w-2/3">
-          <SkullCanvas />
+          <Suspense fallback={null}>
+            <BarberPole />
+          </Suspense>
         </div>
 
         {/* Overlay oscuro solo en mobile para contraste del texto */}

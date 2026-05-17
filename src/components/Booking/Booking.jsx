@@ -101,7 +101,7 @@ export default function Booking() {
               Mensagem
             </label>
             <textarea
-              rows={4}
+              rows={2}
               placeholder="Escreva a sua mensagem..."
               required
               className={`${inputCls} resize-none`}

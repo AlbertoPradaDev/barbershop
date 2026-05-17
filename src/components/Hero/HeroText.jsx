@@ -100,10 +100,10 @@ export default function HeroText() {
       {/* Botones */}
       <div ref={buttonsRef} className="flex flex-col sm:flex-row items-center md:items-start gap-4 mt-2">
         <Button href="https://chat.inbarberapp.com/Pablomendes" variant="primary" target="_blank" rel="noopener noreferrer">
-          Book Now
+          Agendar
         </Button>
         <Button href="#gallery" variant="outline">
-          Our Work
+          Ver Trabalhos
         </Button>
       </div>
     </div>

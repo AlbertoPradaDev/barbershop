@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 
-export default function SkullCanvas() {
+export default function BarberPole() {
   const canvasRef = useRef(null)
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export default function SkullCanvas() {
     scene.add(particles)
 
     // ─── CARGAR MODELO GLB ────────────────────────────────
-    let skull = null
+    let barberPole = null
     const initialRotY = window.innerWidth >= 768 ? Math.PI / 4 : 0
     const dracoLoader = new DRACOLoader()
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/')
@@ -85,28 +85,38 @@ export default function SkullCanvas() {
     loader.load(
       '/models/barbers_pole.glb',
       (gltf) => {
-        skull = gltf.scene
+        barberPole = gltf.scene
 
-        // Centrar y escalar el modelo correctamente
-        const box = new THREE.Box3().setFromObject(skull)
+        const box = new THREE.Box3().setFromObject(barberPole)
         const center = box.getCenter(new THREE.Vector3())
         const size = box.getSize(new THREE.Vector3())
 
         const maxDim = Math.max(size.x, size.y, size.z)
         const scaleFactor = window.innerWidth >= 1024 ? 2.8 : 2
 
-        skull.scale.setScalar(scaleFactor / maxDim)
-        // Centrar DESPUÉS de escalar para que el pivot no desplace el modelo
-        skull.position.copy(center).multiplyScalar(-scaleFactor / maxDim)
-        skull.rotation.y = initialRotY
+        barberPole.scale.setScalar(scaleFactor / maxDim)
+        barberPole.position.copy(center).multiplyScalar(-scaleFactor / maxDim)
+        barberPole.rotation.y = initialRotY
 
-        scene.add(skull)
+        barberPole.traverse((child) => {
+          if (child.isMesh && child.name.includes('Metal')) {
+            child.material.color.multiplyScalar(0.45)
+          }
+        })
+
+        scene.add(barberPole)
+
+        // Entrada: sube desde abajo sincronizado con el texto
+        const finalY = barberPole.position.y
+        barberPole.position.y = finalY - 2
+        gsap.to(barberPole.position, {
+          y: finalY,
+          duration: 2,
+          ease: 'power3.out',
+          delay: 0.3,
+        })
       },
-      // Progreso de carga
-      (xhr) => {
-        console.log(`Cargando: ${(xhr.loaded / xhr.total * 100).toFixed(0)}%`)
-      },
-      // Error
+      undefined,
       (error) => {
         console.error('Error cargando el modelo:', error)
       }
@@ -115,10 +125,18 @@ export default function SkullCanvas() {
     // ─── LOOP DE ANIMACIÓN ────────────────────────────────
     let animationId
     const clock = new THREE.Clock()
+    let autoRotateY = 0
+    let scrollRotY = initialRotY
 
     const animate = () => {
       animationId = requestAnimationFrame(animate)
       const elapsed = clock.getElapsedTime()
+
+      autoRotateY += 0.003
+
+      if (barberPole) {
+        barberPole.rotation.y = scrollRotY + autoRotateY
+      }
 
       particles.rotation.y = elapsed * 0.02
       particles.rotation.x = elapsed * 0.01
@@ -136,9 +154,7 @@ export default function SkullCanvas() {
       scrub: 1.5,
       onUpdate: (self) => {
         const p = self.progress
-        if (skull) {
-          skull.rotation.y = initialRotY + p * Math.PI * 2
-        }
+        scrollRotY = initialRotY + p * Math.PI * 2
         redLight.intensity = 3 + p * 5
         particles.scale.setScalar(1 + p * 0.3)
       },
