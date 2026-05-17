@@ -29,7 +29,7 @@ export default function Nav() {
       <div className="flex items-center justify-between px-8 md:px-12 lg:px-16 py-6">
         {/* Logo */}
         <span className="text-xl font-black tracking-widest uppercase">
-          Lorem<span className="text-accent">.</span>
+          Rio Concept<span className="text-accent">.</span>
         </span>
 
         {/* Links desktop */}
@@ -48,7 +48,7 @@ export default function Nav() {
 
         {/* CTA desktop */}
         <div className="max-md:hidden">
-          <Button href="#booking" variant="outline" size="sm">
+          <Button href="https://chat.inbarberapp.com/Pablomendes" variant="outline" size="sm" target="_blank" rel="noopener noreferrer">
             Book Now
           </Button>
         </div>
@@ -82,7 +82,7 @@ export default function Nav() {
             </li>
           ))}
           <li>
-            <Button href="#booking" variant="outline" size="sm" onClick={() => setOpen(false)}>
+            <Button href="https://chat.inbarberapp.com/Pablomendes" variant="outline" size="sm" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
               Book Now
             </Button>
           </li>

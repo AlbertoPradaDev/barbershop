@@ -10,6 +10,9 @@ export default function Hero() {
           <SkullCanvas />
         </div>
 
+        {/* Overlay oscuro solo en mobile para contraste del texto */}
+        <div className="md:hidden absolute inset-0 bg-primary/60 pointer-events-none z-10" />
+
         {/* Texto — centrado en móvil, izquierda en desktop */}
         <div className="relative z-20 w-full px-8 text-center md:w-1/2 md:px-16 md:text-left lg:px-24">
           <HeroText />

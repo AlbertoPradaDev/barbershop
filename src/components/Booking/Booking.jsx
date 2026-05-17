@@ -1,84 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from '../../lib/gsap';
 import Button from '../Button';
-
-const serviceOptions = [
-  { value: 'corte', label: 'Corte de Cabelo' },
-  { value: 'tatuagem', label: 'Tatuagem' },
-];
-
-function CustomSelect({ value, onChange, placeholder }) {
-  const [open, setOpen] = useState(false);
-  const wrapperRef = useRef(null);
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
-
-  const selected = serviceOptions.find((o) => o.value === value);
-
-  return (
-    <div ref={wrapperRef} className="relative">
-      {/* Trigger */}
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between border-b border-text/20 py-3 text-sm transition-colors duration-300 focus:outline-none focus:border-text"
-      >
-        <span className={selected ? 'text-text' : 'text-text/30'}>
-          {selected ? selected.label : placeholder}
-        </span>
-
-        {/* Chevron — dos líneas que forman ∨ / ∧ */}
-        <span className="relative w-4 h-3 shrink-0">
-          <span
-            className={`absolute left-0 top-1/2 w-2 h-px bg-text/40 origin-right transition-transform duration-300 ${open ? '-rotate-45' : 'rotate-45'}`}
-          />
-          <span
-            className={`absolute right-0 top-1/2 w-2 h-px bg-text/40 origin-left transition-transform duration-300 ${open ? 'rotate-45' : '-rotate-45'}`}
-          />
-        </span>
-      </button>
-
-      {/* Panel */}
-      <div
-        className={`absolute top-full left-0 right-0 z-20 bg-secondary border-x border-b border-text/10 overflow-hidden transition-all duration-300 ease-out ${
-          open ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        {serviceOptions.map((option) => (
-          <button
-            key={option.value}
-            type="button"
-            onClick={() => {
-              onChange(option.value);
-              setOpen(false);
-            }}
-            className={`w-full text-left px-2 py-4 text-sm border-b border-text/10 last:border-0 transition-colors duration-200 ${
-              value === option.value
-                ? 'text-accent'
-                : 'text-text/50 hover:text-text'
-            }`}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export default function Booking() {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const formRef = useRef(null);
-  const [service, setService] = useState('');
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -112,7 +39,6 @@ export default function Booking() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!service) return;
     console.log('Mensagem enviada');
   };
 
@@ -167,18 +93,6 @@ export default function Booking() {
                 className={inputCls}
               />
             </div>
-          </div>
-
-          {/* Serviço */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs tracking-widest uppercase text-text/40">
-              Serviço
-            </label>
-            <CustomSelect
-              value={service}
-              onChange={setService}
-              placeholder="Selecione um serviço"
-            />
           </div>
 
           {/* Mensagem */}

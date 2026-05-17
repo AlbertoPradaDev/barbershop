@@ -65,18 +65,17 @@ export default function Footer() {
       {/* Logo grande decorativo de fondo */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
         <span className="text-[20vw] font-black uppercase text-text/2 select-none leading-none">
-          Lorem
+          Rio
         </span>
       </div>
 
       {/* Logo principal */}
       <div ref={logoRef} className="mb-16">
         <span className="text-4xl md:text-6xl font-black uppercase tracking-tight">
-          Lorem<span className="text-accent">.</span>
+          Rio Concept<span className="text-accent">.</span>
         </span>
         <p className="text-text/40 text-sm mt-3 max-w-xs leading-relaxed">
-          Barbearia & Estúdio de Tatuagem. Arte, estilo e identidade em um só
-          lugar.
+          Barbearia profissional. Tradição, estilo e identidade em cada corte.
         </p>
       </div>
 
@@ -130,15 +129,15 @@ export default function Footer() {
             Contacto
           </span>
           <ul className="flex flex-col gap-3">
-            <li className="text-sm text-text/60">Rua Lorem Ipsum, 123</li>
-            <li className="text-sm text-text/60">São Paulo, SP</li>
-            <li className="text-sm text-text/60 mt-2">Seg – Sáb: 9h às 20h</li>
+            <li className="text-sm text-text/60">Av. Dom Afonso Henriques 85</li>
+            <li className="text-sm text-text/60">2830-247 Barreiro</li>
+            <li className="text-sm text-text/60 mt-2">Ter – Sáb: 10h às 20h</li>
             <li>
               <a
                 href="tel:+5500000000000"
                 className="text-sm text-text/60 hover:text-text transition-colors duration-300"
               >
-                +55 (00) 00000-0000
+                +351 961 057 595
               </a>
             </li>
           </ul>
@@ -148,7 +147,7 @@ export default function Footer() {
       {/* Línea divisoria + copyright */}
       <div className="border-t border-text/10 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <span className="text-xs text-text/20 tracking-widest uppercase">
-          © 2026 Lorem. Todos os direitos reservados.
+          © 2026 Rio Concept. Todos os direitos reservados.
         </span>
         <div className="flex flex-col sm:items-end gap-2">
           <a
@@ -161,13 +160,12 @@ export default function Footer() {
             Desenvolvido por Alberto Prada
           </a>
           <a
-            href="https://skfb.ly/oSnMY"
+            href="https://skfb.ly/6QUMx"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[10px] text-text/20 hover:text-text/40 transition-colors duration-300"
           >
-            "Skull with Beard" by Vicente Betoret Ferrero — CC BY 4.0
-            
+            "Barbers Pole" by Vinny Passmore — CC BY 4.0
           </a>
         </div>
       </div>

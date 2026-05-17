@@ -75,7 +75,7 @@ export default function HeroText() {
         ref={taglineRef}
         className="text-xs tracking-[0.3em] uppercase text-accent"
       >
-        Barber & Tattoo Studio
+        Barbearia Profissional
       </span>
 
       {/* Título principal */}
@@ -84,9 +84,9 @@ export default function HeroText() {
         className="text-6xl md:text-7xl lg:text-8xl font-black uppercase leading-none tracking-tight"
         style={{ perspective: '400px' }}
       >
-        Lorem
+        Rio
         <br />
-        Ipsum
+        Concept Hair
       </h1>
 
       {/* Subtítulo */}
@@ -94,13 +94,12 @@ export default function HeroText() {
         ref={subtitleRef}
         className="text-sm md:text-base text-text/60 max-w-sm leading-relaxed"
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cuts that
-        define. Ink that lasts.
+        Cortes precisos, estilo inconfundível. Onde cada detalhe faz a diferença.
       </p>
 
       {/* Botones */}
       <div ref={buttonsRef} className="flex flex-col sm:flex-row items-center md:items-start gap-4 mt-2">
-        <Button href="#booking" variant="primary">
+        <Button href="https://chat.inbarberapp.com/Pablomendes" variant="primary" target="_blank" rel="noopener noreferrer">
           Book Now
         </Button>
         <Button href="#gallery" variant="outline">

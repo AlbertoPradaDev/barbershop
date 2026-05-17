@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react';
 import { gsap } from '../../lib/gsap';
 
 const items = [
-  { id: 1, category: 'Barbearia', label: 'Corte Clássico', aspect: 'tall' },
-  { id: 2, category: 'Tatuagem', label: 'Blackwork', aspect: 'wide' },
-  { id: 3, category: 'Barbearia', label: 'Fade & Taper', aspect: 'square' },
-  { id: 4, category: 'Tatuagem', label: 'Realismo', aspect: 'tall' },
-  { id: 5, category: 'Barbearia', label: 'Barba & Perfil', aspect: 'square' },
-  { id: 6, category: 'Tatuagem', label: 'Lettering', aspect: 'wide' },
+  { id: 1, category: 'Corte', label: 'Corte Clássico', aspect: 'tall' },
+  { id: 2, category: 'Barba', label: 'Barba Completa', aspect: 'wide' },
+  { id: 3, category: 'Corte', label: 'Fade & Taper', aspect: 'square' },
+  { id: 4, category: 'Corte', label: 'Corte Navalhado', aspect: 'tall' },
+  { id: 5, category: 'Barba', label: 'Perfil & Acabamento', aspect: 'square' },
+  { id: 6, category: 'Corte', label: 'Degradê', aspect: 'wide' },
 ];
 
 const desktopAspectMap = {
@@ -23,56 +23,76 @@ export default function Gallery() {
   const mobileCardsRef = useRef([]);
 
   useEffect(() => {
-    const isDesktop = window.innerWidth >= 768;
+    let ctx;
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        titleRef.current,
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: titleRef.current, start: 'top 80%' },
-        },
-      );
+    const setup = () => {
+      if (ctx) ctx.revert();
 
-      if (isDesktop) {
-        const totalWidth = trackRef.current.scrollWidth;
-        const viewportWidth = window.innerWidth;
+      const isDesktop = window.innerWidth >= 768;
 
-        gsap.to(trackRef.current, {
-          x: -(totalWidth - viewportWidth + 96),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: () => `+=${totalWidth}`,
-            scrub: 1,
-            pin: true,
+      ctx = gsap.context(() => {
+        gsap.fromTo(
+          titleRef.current,
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: titleRef.current, start: 'top 80%' },
           },
-        });
-      } else {
-        mobileCardsRef.current.forEach((card, i) => {
-          if (!card) return;
-          gsap.fromTo(
-            card,
-            { y: 40, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.6,
-              delay: i * 0.07,
-              ease: 'power2.out',
-              scrollTrigger: { trigger: card, start: 'top 88%' },
-            },
-          );
-        });
-      }
-    }, sectionRef);
+        );
 
-    return () => ctx.revert();
+        if (isDesktop) {
+          gsap.to(trackRef.current, {
+            x: () => -(trackRef.current.scrollWidth - window.innerWidth + 96),
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top top',
+              end: () => `+=${trackRef.current.scrollWidth}`,
+              scrub: 1,
+              pin: true,
+              invalidateOnRefresh: true,
+            },
+          });
+        } else {
+          mobileCardsRef.current.forEach((card, i) => {
+            if (!card) return;
+            gsap.fromTo(
+              card,
+              { y: 40, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                delay: i * 0.07,
+                ease: 'power2.out',
+                scrollTrigger: { trigger: card, start: 'top 88%' },
+              },
+            );
+          });
+        }
+      }, sectionRef);
+    };
+
+    setup();
+
+    // Recrear el contexto al cruzar el breakpoint de 768px
+    let lastIsDesktop = window.innerWidth >= 768;
+    const onResize = () => {
+      const isDesktop = window.innerWidth >= 768;
+      if (isDesktop !== lastIsDesktop) {
+        lastIsDesktop = isDesktop;
+        setup();
+      }
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      ctx.revert();
+    };
   }, []);
 
   return (

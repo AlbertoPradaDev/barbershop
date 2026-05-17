@@ -4,8 +4,8 @@ import Button from '../Button';
 
 const stats = [
   { value: '8+', label: 'Anos de experiência' },
-  { value: '1.2k', label: 'Clientes satisfeitos' },
-  { value: '300+', label: 'Tatuagens realizadas' },
+  { value: '2k+', label: 'Clientes satisfeitos' },
+  { value: '500+', label: 'Cortes por mês' },
 ];
 
 export default function About() {
@@ -140,21 +140,21 @@ export default function About() {
               Sobre nós
             </span>
             <h2 className="text-5xl md:text-6xl font-black uppercase mt-3 leading-none">
-              Arte &<br />
+              Tradição &<br />
               Estilo
             </h2>
           </div>
 
           <p className="text-text/60 leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Somos mais
-            do que uma barbearia — somos um estúdio de arte onde cada corte e
-            cada tatuagem conta uma história única.
+            Na Rio Concept, somos mais do que uma barbearia — somos um espaço
+            onde tradição e modernidade se encontram. Cada corte é pensado para
+            realçar a sua identidade.
           </p>
 
           <p className="text-text/60 leading-relaxed">
-            Com anos de experiência em barbearia clássica e tatuagem
-            contemporânea, combinamos tradição e inovação para criar resultados
-            que superam expectativas.
+            Com anos de experiência e técnicas refinadas, nossa equipe combina
+            o clássico da barbearia tradicional com as tendências atuais para
+            entregar resultados que superam expectativas.
           </p>
 
           {/* Stats */}

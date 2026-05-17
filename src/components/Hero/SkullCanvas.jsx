@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 
 export default function SkullCanvas() {
@@ -29,7 +30,9 @@ export default function SkullCanvas() {
     })
     renderer.setSize(canvas.clientWidth, canvas.clientHeight)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.shadowMap.enabled = true
+    renderer.outputColorSpace = THREE.SRGBColorSpace
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 1.5
 
     // ─── ENTRADA SINCRONIZADA CON EL TEXTO ───────────────
     const entranceTween = gsap.fromTo(
@@ -39,16 +42,20 @@ export default function SkullCanvas() {
     )
 
     // ─── LUCES ────────────────────────────────────────────
-    const ambientLight = new THREE.AmbientLight('#ffffff', 0.5)
+    const ambientLight = new THREE.AmbientLight('#ffffff', 2)
     scene.add(ambientLight)
 
-    const pointLight = new THREE.PointLight('#ffffff', 2, 10)
-    pointLight.position.set(2, 2, 2)
+    const pointLight = new THREE.PointLight('#ffffff', 5, 15)
+    pointLight.position.set(2, 3, 3)
     scene.add(pointLight)
 
-    const redLight = new THREE.PointLight('#8B0000', 3, 8)
+    const redLight = new THREE.PointLight('#8B0000', 4, 10)
     redLight.position.set(-2, -2, 1)
     scene.add(redLight)
+
+    const rimLight = new THREE.PointLight('#ffffff', 3, 10)
+    rimLight.position.set(0, 2, -3)
+    scene.add(rimLight)
 
     // ─── PARTÍCULAS ───────────────────────────────────────
     const particleCount = 200
@@ -70,25 +77,27 @@ export default function SkullCanvas() {
     // ─── CARGAR MODELO GLB ────────────────────────────────
     let skull = null
     const initialRotY = window.innerWidth >= 768 ? Math.PI / 4 : 0
+    const dracoLoader = new DRACOLoader()
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/')
     const loader = new GLTFLoader()
+    loader.setDRACOLoader(dracoLoader)
 
     loader.load(
-      '/models/skull.glb',
+      '/models/barbers_pole.glb',
       (gltf) => {
         skull = gltf.scene
 
-        // Centrar el modelo automáticamente
+        // Centrar y escalar el modelo correctamente
         const box = new THREE.Box3().setFromObject(skull)
         const center = box.getCenter(new THREE.Vector3())
         const size = box.getSize(new THREE.Vector3())
 
-        // Mover el modelo a la origen
-        skull.position.sub(center)
-
-        // Escalar para que quepa bien en pantalla
         const maxDim = Math.max(size.x, size.y, size.z)
         const scaleFactor = window.innerWidth >= 1024 ? 2.8 : 2
+
         skull.scale.setScalar(scaleFactor / maxDim)
+        // Centrar DESPUÉS de escalar para que el pivot no desplace el modelo
+        skull.position.copy(center).multiplyScalar(-scaleFactor / maxDim)
         skull.rotation.y = initialRotY
 
         scene.add(skull)
@@ -152,6 +161,7 @@ export default function SkullCanvas() {
       renderer.dispose()
       particleGeo.dispose()
       particleMat.dispose()
+      dracoLoader.dispose()
       window.removeEventListener('resize', handleResize)
     }
   }, [])

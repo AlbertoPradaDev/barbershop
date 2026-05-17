@@ -6,6 +6,8 @@ export default function Button({
   className = '',
   onClick,
   type = 'button',
+  target,
+  rel,
 }) {
   const base =
     'group relative inline-flex items-center justify-center overflow-hidden text-xs font-black tracking-widest uppercase'
@@ -48,7 +50,7 @@ export default function Button({
 
   if (href) {
     return (
-      <a href={href} onClick={onClick} className={cls}>
+      <a href={href} onClick={onClick} target={target} rel={rel} className={cls}>
         {inner}
       </a>
     )

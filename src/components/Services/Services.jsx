@@ -3,25 +3,25 @@ import { gsap } from '../../lib/gsap';
 
 const services = [
   {
-    id: 'barber',
-    label: 'Barbería',
+    id: 'corte',
+    label: 'Corte',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cortes que definen tu estilo.',
+      'Cortes modernos e clássicos adaptados ao seu estilo. Precisão em cada detalhe para um resultado impecável.',
     items: [
-      'Corte clásico',
+      'Corte clássico',
       'Fade & taper',
-      'Barba & perfilado',
-      'Afeitado navaja',
+      'Corte navalhado',
+      'Acabamento completo',
     ],
-    price: 'Desde $25',
+    price: 'Desde €15',
   },
   {
-    id: 'tattoo',
-    label: 'Tatuajes',
+    id: 'barba',
+    label: 'Barba',
     description:
-      'Lorem ipsum dolor sit amet. Tinta que cuenta tu historia, arte que dura para siempre.',
-    items: ['Blackwork', 'Realismo', 'Tradicional', 'Lettering'],
-    price: 'Desde $80',
+      'Tratamento e modelagem de barba com técnicas tradicionais. Do perfil ao acabamento, cuidado total.',
+    items: ['Barba completa', 'Aparagem & perfil', 'Hidratação de barba', 'Afeitado navaja'],
+    price: 'Desde €10',
   },
 ];
 
@@ -79,12 +79,12 @@ export default function Services() {
       {/* Título */}
       <div ref={titleRef} className="mb-12 md:mb-20">
         <span className="text-xs tracking-[0.3em] uppercase text-text/40">
-          Lo que hacemos
+          O que fazemos
         </span>
         <h2 className="text-5xl md:text-6xl font-black uppercase mt-3 leading-none">
-          Nuestros
+          Nossos
           <br />
-          Servicios
+          Serviços
         </h2>
       </div>
 
@@ -122,7 +122,7 @@ export default function Services() {
             {/* Precio */}
             <div className="flex items-center justify-between border-t border-text/10 pt-6">
               <span className="text-xs tracking-widest uppercase text-text/40">
-                Precio
+                Preço
               </span>
               <span className="text-lg font-bold">{service.price}</span>
             </div>
