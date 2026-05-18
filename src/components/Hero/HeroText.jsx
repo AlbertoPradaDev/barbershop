@@ -11,25 +11,17 @@ export default function HeroText() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // SplitText divide cada elemento en caracteres individuales
-      const splitTagline = new SplitText(taglineRef.current, { type: 'chars' });
       const splitTitle = new SplitText(titleRef.current, {
         type: 'chars, words',
       });
 
       const tl = gsap.timeline({ delay: 0.1 });
 
-      // 1. Tagline — caracteres entran desde abajo uno a uno
+      // 1. Tagline — fade simple como bloque
       tl.fromTo(
-        splitTagline.chars,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.3,
-          stagger: 0.025,
-          ease: 'power2.out',
-        },
+        taglineRef.current,
+        { y: 12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' },
       );
 
       // 2. Título — caracteres caen desde arriba con peso
