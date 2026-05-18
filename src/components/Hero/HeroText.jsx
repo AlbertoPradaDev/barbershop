@@ -17,7 +17,7 @@ export default function HeroText() {
         type: 'chars, words',
       });
 
-      const tl = gsap.timeline({ delay: 0.8 });
+      const tl = gsap.timeline({ delay: 0.1 });
 
       // 1. Tagline — caracteres entran desde abajo uno a uno
       tl.fromTo(
@@ -26,8 +26,8 @@ export default function HeroText() {
         {
           y: 0,
           opacity: 1,
-          duration: 0.4,
-          stagger: 0.04,
+          duration: 0.3,
+          stagger: 0.025,
           ease: 'power2.out',
         },
       );
@@ -40,18 +40,19 @@ export default function HeroText() {
           y: 0,
           opacity: 1,
           rotationX: 0,
-          duration: 0.6,
-          stagger: 0.03,
+          duration: 0.5,
+          stagger: 0.02,
           ease: 'back.out(1.4)',
         },
-        '-=0.2', // empieza 0.2s antes de que termine lo anterior
+        '-=0.1',
       );
 
-      // 3. Subtítulo — animación ligera pero empieza visible para no bloquear LCP
-      gsap.fromTo(
+      // 3. Subtítulo — fade simple
+      tl.fromTo(
         subtitleRef.current,
-        { y: 10 },
-        { y: 0, duration: 0.7, ease: 'power2.out', delay: 0.3 },
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' },
+        '-=0.2',
       );
 
       // 4. Botones — entran desde abajo

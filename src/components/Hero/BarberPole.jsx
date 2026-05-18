@@ -41,7 +41,7 @@ export default function BarberPole() {
     const entranceTween = gsap.fromTo(
       canvas,
       { opacity: 0 },
-      { opacity: 0.9, duration: 2.5, delay: 0.8, ease: 'power2.out' }
+      { opacity: 0.9, duration: 2.5, delay: 0.1, ease: 'power2.out' }
     )
 
     // ─── LUCES ────────────────────────────────────────────
