@@ -173,7 +173,7 @@ export default function BarberPole() {
 
       const elapsed = clock.getElapsedTime()
 
-      autoRotateY += 0.003
+      if (window.innerWidth >= 768) autoRotateY += 0.003
 
       if (barberPole) {
         barberPole.rotation.y = scrollRotY + autoRotateY
