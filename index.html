@@ -66,6 +66,11 @@
     <!-- Google Fonts — non-blocking -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload GLB para romper la chain: index.js → three.js → GLB -->
+    <link rel="preload" as="fetch" href="/models/barbers_pole.glb" crossorigin />
+    <!-- Preload Inter 400 (LCP font) para evitar CLS -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" />
     <link rel="preload" as="style"
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;900&display=swap" />
     <link

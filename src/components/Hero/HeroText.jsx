@@ -47,12 +47,11 @@ export default function HeroText() {
         '-=0.2', // empieza 0.2s antes de que termine lo anterior
       );
 
-      // 3. Subtítulo — fade simple
-      tl.fromTo(
+      // 3. Subtítulo — animación ligera pero empieza visible para no bloquear LCP
+      gsap.fromTo(
         subtitleRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' },
-        '-=0.2',
+        { y: 10 },
+        { y: 0, duration: 0.7, ease: 'power2.out', delay: 0.3 },
       );
 
       // 4. Botones — entran desde abajo
